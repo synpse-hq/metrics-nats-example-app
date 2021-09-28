@@ -1,0 +1,13 @@
+queries:
+- query: 'agent_mem_used'
+- query: 'agent_mem_total'
+- query: 'agent_mem_cached'
+- query: 'agent_mem_free'
+- query: 'agent_cpu_user_percentage'
+- query: 'agent_cpu_nice_percentage'
+- query: 'agent_cpu_system_percentage'
+- query: 'agent_cpu_idle_percentage'
+- query: 'agent_cpu_iowait_percentage'
+- query: 'agent_cpu_irq_percentage'
+- query: 'agent_cpu_steal_percentage'
+- query: 'agent_cpu_guest_percentage'

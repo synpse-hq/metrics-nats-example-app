@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  app:
+    container_name: app
+    logging:
+      options:
+        max-size: 10m
+    build:
+      context: ./
+      dockerfile: dockerfiles/Dockerfile
+    restart: always
+    depends_on:
+      - nats
+    links:
+      - nats:nats
+    ports:
+      - "8080:8080"
+  nats:
+    image: nats
+    container_name: nats
+    restart: always
+    ports:
+      - 4222:4222
+      - 6222:6222
+      - 8222:8222
+
+networks:
+  app:
+    driver: bridge
