@@ -45,4 +45,4 @@ push-all: push-arm64 push-arm push-amd64
 
 
 run-dev:
-	docker-compose up
+	docker-compose up --build

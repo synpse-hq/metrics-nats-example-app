@@ -140,7 +140,7 @@ func (m *MetricsBridge) runOnce(ctx context.Context) error {
 	}
 
 	// send to pub/sub locally for cloud SDKS to consume
-	m.log.Info("publishing metrics")
+	m.log.Info("publishing metrics", zap.String("data", string(data)))
 	err = m.nats.Publish(m.config.MetricsTopic, data)
 	if err != nil {
 		return err

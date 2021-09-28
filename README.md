@@ -1,4 +1,4 @@
-# CPU and Memory gathering example application with NATS
+# Synpse CPU and Memory application with NATS
 
 Example application which gathers `CPU` and `Memory` stats (see `pkg/metricsbridge/config/config.yaml` for all metrics) 
 and sending them to NATS (topic `metrics`) running on the same device. Application from first sight might look bit complicated (but it is not). 
