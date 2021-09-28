@@ -10,7 +10,7 @@ app:
 
 .PHONY: build
 build: 
-	docker build --build-arg GOARCH=${GOARCH} . -t ${APP_REPO}:${GOARCH} -f dockerfiles/Dockerfile 
+	docker build --build-arg GOARCH=${GOARCH} . -t ${APP_REPO}:${GOARCH} -f Dockerfile 
 
 .PHONY: push
 push:
