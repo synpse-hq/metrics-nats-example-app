@@ -1,48 +1,27 @@
 APP_REPO ?= quay.io/synpse/metrics-nats-example-app
 TAG_NAME = $(shell git rev-parse --short=7 HEAD)$(shell [[ $$(git status --porcelain) = "" ]] || echo -dirty)
-OUTPUT_BIN_APP ?= release/app
+OUTPUT_BIN_APP ?= release
 LDFLAGS		+= -s -w
 GOARCH ?= arm64
 
-.PHONY: app
-app:
-	CGO_ENABLED=0 GOARCH=${GOARCH} go build -ldflags "$(LDFLAGS)" -o ${OUTPUT_BIN_APP}/app ./cmd/app
 
-.PHONY: build
-build: 
-	docker build --build-arg GOARCH=${GOARCH} . -t ${APP_REPO}:${GOARCH} -f Dockerfile 
+APP_REPO ?= quay.io/synpse/aws-iot-core-example
 
-.PHONY: push
-push:
-	docker push ${APP_REPO}:${GOARCH}
+.PHONY: image
+image:
+	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ${APP_REPO}:latest --push -f Dockerfile .
 
-.PHONY: build-arm64
-build-arm64: 
-	GOARCH=arm64 make build
+.PHONY: app-arm, app-arm64, app-amd64
+app-arm:
+	CGO_ENABLED=0 GOARCH=arm go build -ldflags "$(LDFLAGS)" -o ${OUTPUT_BIN_APP}/linux/arm/v7/app ./cmd/app
 
-.PHONY: build-arm
-build-arm:
-	GOARCH=arm make build
+app-arm64:
+	CGO_ENABLED=0 GOARCH=arm64 go build -ldflags "$(LDFLAGS)" -o ${OUTPUT_BIN_APP}/linux/arm64/app ./cmd/app
 
-.PHONY: build-amd64
-build-amd64:
-	GOARCH=amd64 make build
+app-amd64:
+	CGO_ENABLED=0 GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o ${OUTPUT_BIN_APP}/linux/amd64/app ./cmd/app
 
-.PHONY: push-arm64
-push-arm64: build-arm64
-	GOARCH=arm64 make push
-
-.PHONY: push-arm
-push-arm: build-arm
-	GOARCH=arm make push
-
-.PHONY: push-amd64
-push-amd64:  build-amd64
-	GOARCH=amd64 make push
-
-.PHONY: push-all
-push-all: push-arm64 push-arm push-amd64
-
+app: app-arm app-arm64 app-amd64
 
 run-dev:
 	docker-compose up --build
